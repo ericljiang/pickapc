@@ -1,0 +1,25 @@
+/* https://material.io/guidelines/resources/shadows.html#shadows-sketch */
+
+.dp-1 {
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.14),
+                0px 2px 2px 0px rgba(0, 0, 0, 0.12),
+                0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+}
+
+.dp-2 {
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.14),
+                0px 3px 4px 0px rgba(0, 0, 0, 0.12),
+                0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.dp-3 {
+    box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.14),
+                0px 3px 4px 0px rgba(0, 0, 0, 0.12),
+                0px 1px 8px 0px rgba(0, 0, 0, 0.2);
+}
+
+.dp-4 {
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.14),
+                0px 4px 5px 0px rgba(0, 0, 0, 0.12),
+                0px 1px 10px 0px rgba(0, 0, 0, 0.2);
+}
