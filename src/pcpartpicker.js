@@ -14,7 +14,7 @@ export default function fetchParts(partlist, callback) {
 }
 
 function fetchMarkup(partlist, callback) {
-    var url = "http://www.whateverorigin.org/get?url="
+    var url = "https://whateverorigin.herokuapp.com/get?url="
             + encodeURIComponent("https://pcpartpicker.com/qapi/partlist/markup/?mode=markdown&partlist=" + partlist)
             + "&callback=?";
     $.getJSON(url, function(data) {

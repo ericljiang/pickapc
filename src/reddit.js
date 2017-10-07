@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 export default function fetchPosts(subreddit, limit, after, callback) {
-    var url = "http://www.whateverorigin.org/get?url="
+    var url = "https://whateverorigin.herokuapp.com/get?url="
             + encodeURIComponent("http://reddit.com/r/" + subreddit + ".json"
                     + "?limit=" + limit + "&after=" + after)
             + "&callback=?";
