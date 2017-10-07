@@ -12,7 +12,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to pickapc</h1>
         </header>
-        <Listing limit="200"/>
+        <Listing limit="10"/>
       </div>
     );
   }
