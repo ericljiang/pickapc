@@ -1,15 +1,12 @@
 import $ from "jquery";
 
 export default function fetchPosts(subreddit, limit, after, callback) {
-    var url = "https://whateverorigin.herokuapp.com/get?url="
-            + encodeURIComponent("http://reddit.com/r/" + subreddit + ".json"
-                    + "?limit=" + limit + "&after=" + after)
-            + "&callback=?";
+    var url = "https://www.reddit.com/r/" + subreddit + ".json?limit=" + limit + "&jsonp=?";
     $.getJSON(url, function(data) {
-        var posts = JSON.parse(data.contents).data.children
-                .filter(thing => thing.kind === "t3")
-                .filter(thing => !thing.data.stickied)
-                .map(thing => thing.data);
+        var posts = data.data.children
+                .filter(child => child.kind === "t3")
+                .filter(child => !child.data.stickied)
+                .map(child => child.data);
         callback(posts);
     });
 };

@@ -14,12 +14,10 @@ export default function fetchParts(partlist, callback) {
 }
 
 function fetchMarkup(partlist, callback) {
-    var url = "https://whateverorigin.herokuapp.com/get?url="
-            + encodeURIComponent("https://pcpartpicker.com/qapi/partlist/markup/?mode=markdown&partlist=" + partlist)
-            + "&callback=?";
+    var url = "https://allorigins.us/get?method=raw&url="
+            + encodeURIComponent("https://pcpartpicker.com/qapi/partlist/markup/?mode=markdown&partlist=" + partlist);
     $.getJSON(url, function(data) {
-        var content = JSON.parse(data.contents).content;
-        callback(content);
+        callback(data.content);
     });
 }
 
