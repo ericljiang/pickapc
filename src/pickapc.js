@@ -7,6 +7,7 @@ import fetchParts from './pcpartpicker'
  * @param {function} callback function to call that takes the resulting list of posts
  */
 export default function fetchPostsAndParts(limit, callback) {
+    console.log("Fetching %d posts with parts...", limit);
     fetchPostsWithList(limit, function (posts) {
         var count = 0;
         posts.forEach(function (post) {
@@ -18,6 +19,8 @@ export default function fetchPostsAndParts(limit, callback) {
                 post.partsList = partsList;
                 count++;
                 if (count >= posts.length) {
+                    console.log("Got %d posts with parts:", count);
+                    console.log(posts);
                     callback(posts);
                 }
             });
@@ -38,7 +41,7 @@ function fetchPostsWithList(limit, callback) {
                 return p.selftext.includes("pcpartpicker.com/list/");
             });
             postsWithLists.forEach(p => {
-                p.listId = p.selftext.split("pcpartpicker.com/list/")[1].split(/[\s)\]]/)[0];
+                p.listId = p.selftext.split("pcpartpicker.com/list/")[1].split(/[^0-9a-zA-Z-_]/)[0];
             });
             postsWithLists = postsWithLists.filter(p => {
                 return p.listId.length > 1;

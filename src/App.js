@@ -26,7 +26,6 @@ class Listing extends Component {
 
   componentDidMount() {
     fetchPosts(this.props.limit, posts => {
-      console.log("Rendering posts...", posts);
       this.setState({
         posts: posts
       });
