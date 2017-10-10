@@ -1,13 +1,17 @@
 import $ from "jquery";
 
+/**
+ * Fetch parts from PCPartPicker for a given list ID.
+ * @param {string} partlist ID of the list to fetch
+ * @param {function} callback A function that takes the list of parts
+ */
 export default function fetchParts(partlist, callback) {
     fetchMarkup(partlist, function(markup) {
         try {
             var build = parseMarkup(markup);
             callback(null, build);
         } catch (e) {
-            console.error("Could not parse markup for " + partlist);
-            console.error(markup)
+            console.error("Could not parse markup for", partlist, ":", markup);
             callback(e, null);
         }
     });
