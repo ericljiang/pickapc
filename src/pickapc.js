@@ -1,27 +1,41 @@
 import fetchPosts from './reddit'
 import fetchParts from './pcpartpicker'
 
+export default function fetchPostsAndParts(limit, callback) {
+    function accumulateBatches(posts, batchSize, after, callback) {
+        fetchBatchPostsAndParts(batchSize, after, function(batch) {
+            Array.prototype.push.apply(posts, batch);
+            if (posts.length >= limit) {
+                callback(posts.slice(0, limit));
+            } else {
+                after = batch[batch.length - 1].name;
+                accumulateBatches(posts, batchSize, after, callback);
+            }
+        })
+    }
+    accumulateBatches([], limit * 5, "", callback);
+}
+
 /**
  * Fetches posts from /r/buildapc and appends their PCPartPicker builds to them.
  * @param {number} limit number of posts to fetch
  * @param {function} callback function to call that takes the resulting list of posts
  */
-export default function fetchPostsAndParts(limit, callback) {
+function fetchBatchPostsAndParts(limit, after, callback) {
     console.log("Fetching %d posts with parts...", limit);
-    fetchPostsWithList(limit, function (posts) {
-        var count = 0;
+    fetchBatchPostsWithList(limit, after, function (posts) {
+        var processed = 0;
         posts.forEach(function (post) {
             fetchParts(post.listId, function (err, partsList) {
+                processed++;
                 if (err) {
-                    console.error("Post causing error:");
-                    console.error(post);
+                    console.error("Post causing error:", post);
+                } else {
+                    post.partsList = partsList;
                 }
-                post.partsList = partsList;
-                count++;
-                if (count >= posts.length) {
-                    console.log("Got %d posts with parts:", count);
-                    console.log(posts);
-                    callback(posts);
+                if (processed >= posts.length) {
+                    console.log("Got", processed, "posts with parts:", posts);
+                    callback(posts.filter(p => p.partsList));
                 }
             });
         });
@@ -30,29 +44,16 @@ export default function fetchPostsAndParts(limit, callback) {
 
 /**
  * Fetches posts from /r/buildapc that contain PCPartPicker lists.
- * @param {number} limit number of posts to fetch
+ * @param {number} limit number of posts to attempt to fetch
  * @param {function} callback function to call that takes the resulting list of posts
  */
-function fetchPostsWithList(limit, callback) {
-    var posts = [];
-    function fetchBatch(batchSize, after) {
-        fetchPosts("buildapc", batchSize, after, function(data) {
-            var postsWithLists = data.filter(p => {
-                return p.selftext.includes("pcpartpicker.com/list/");
-            });
-            postsWithLists.forEach(p => {
-                p.listId = p.selftext.split("pcpartpicker.com/list/")[1].split(/[^0-9a-zA-Z-_]/)[0];
-            });
-            postsWithLists = postsWithLists.filter(p => {
-                return p.listId.length > 1;
-            });
-            Array.prototype.push.apply(posts, postsWithLists);
-            if (posts.length < limit) {
-                fetchBatch(batchSize, posts[posts.length - 1].name);
-            } else {
-                callback(posts.slice(0, limit));
-            }
+function fetchBatchPostsWithList(limit, after, callback) {
+    fetchPosts("buildapc", limit, after, function (data) {
+        var posts = data.filter(p => p.selftext.includes("pcpartpicker.com/list/"));
+        posts.forEach(p => {
+            p.listId = p.selftext.split("pcpartpicker.com/list/")[1].split(/[^0-9a-zA-Z-_]/)[0];
         });
-    }
-    fetchBatch(limit * 4);
+        posts = posts.filter(p => p.listId.length > 1);
+        callback(posts);
+    });
 }
