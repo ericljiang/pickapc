@@ -12,7 +12,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to pickapc</h1>
         </header>
-        <Listing limit="10"/>
+        <Listing sort="hot" limit="10"/>
       </div>
     );
   }
@@ -25,7 +25,7 @@ class Listing extends Component {
   }
 
   componentDidMount() {
-    fetchPosts(this.props.limit, posts => {
+    fetchPosts(this.props.sort, this.props.limit, posts => {
       this.setState({
         posts: posts
       });
