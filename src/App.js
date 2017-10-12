@@ -5,14 +5,26 @@ import './material-shadows.css';
 import fetchPosts from './pickapc'
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.handleLimitChange = this.handleLimitChange.bind(this);
+    this.state = { limit: 10 };
+  }
+
+  handleLimitChange(e) {
+    this.setState({ limit: e.target.value });
+  }
+
   render() {
+    const limit = this.state.limit;
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to pickapc</h1>
+          <input value={limit} onChange={this.handleLimitChange}/>
         </header>
-        <Listing sort="hot" limit="10"/>
+        <Listing sort="hot" limit={parseInt(limit)} />
       </div>
     );
   }
@@ -24,16 +36,13 @@ class Listing extends Component {
     this.state = { posts: [] };
   }
 
-  componentDidMount() {
-    fetchPosts(this.props.sort, this.props.limit, posts => {
-      this.setState({
-        posts: posts
-      });
-    });
-  }
-
   render() {
-    if (this.state.posts.length === 0) {
+    if (!isNaN(this.props.limit) && this.state.posts.length !== this.props.limit) {
+      fetchPosts(this.props.sort, this.props.limit, posts => {
+        this.setState({
+          posts: posts
+        });
+      });
       return (
         <Loading />
       )
