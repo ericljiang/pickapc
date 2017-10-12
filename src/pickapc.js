@@ -3,18 +3,20 @@ import fetchParts from './pcpartpicker'
 
 export default function fetchPostsAndParts(sort, limit, callback) {
     var batchSize = limit * 5;
-    function accumulateBatches(posts, after) {
+    var posts = [];
+    var after = "";
+    function accumulateBatches() {
         fetchBatchPostsAndParts(sort, batchSize, after, function(batch) {
             Array.prototype.push.apply(posts, batch);
             if (posts.length >= limit) {
                 callback(posts.slice(0, limit));
             } else {
                 after = batch[batch.length - 1].name;
-                accumulateBatches(posts, after);
+                accumulateBatches();
             }
         })
     }
-    accumulateBatches([], "");
+    accumulateBatches();
 }
 
 /**
