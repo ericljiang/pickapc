@@ -21,4 +21,4 @@ export default function fetchPosts(subreddit, sort, limit, after, callback) {
         console.log("Got %d posts from /r/%s.", posts.length, subreddit);
         callback(posts);
     });
-};
+}
