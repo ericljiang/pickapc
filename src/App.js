@@ -8,23 +8,37 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.handleLimitChange = this.handleLimitChange.bind(this);
-    this.state = { limit: 10 };
+    this.handleSortChange = this.handleSortChange.bind(this);
+    this.state = { limit: 10, sort: "hot" };
   }
 
   handleLimitChange(e) {
     this.setState({ limit: e.target.value });
   }
 
+  handleSortChange(e) {
+    this.setState({ sort: e.target.value });
+  }
+
   render() {
     const limit = this.state.limit;
+    const sort = this.state.sort;
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to pickapc</h1>
-          <input value={limit} onChange={this.handleLimitChange}/>
+          <p>
+            Fetch <input id="limitInput" value={limit} onChange={this.handleLimitChange}/> posts
+            from /r/buildapc/
+            <select id="sortSelect" value={sort} onChange={this.handleSortChange}>
+              <option>hot</option>
+              <option>top</option>
+              <option>new</option>
+            </select>
+          </p>
         </header>
-        <Listing sort="hot" limit={parseInt(limit)} />
+        <Listing sort={sort} limit={parseInt(limit)} />
       </div>
     );
   }
@@ -34,6 +48,12 @@ class Listing extends Component {
   constructor(props) {
     super(props);
     this.state = { posts: [] };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!isNaN(nextProps.limit)) {
+      this.setState({ posts: [] });
+    }
   }
 
   render() {
