@@ -28,6 +28,11 @@ html {
   margin-top: 10%;
 }
 
+#limitInput {
+  width: 3em;
+  text-align: right;
+}
+
 td.title a:link {
   color: black;
 }

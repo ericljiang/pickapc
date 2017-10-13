@@ -29,7 +29,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to pickapc</h1>
           <p>
-            Fetch <input id="limitInput" value={limit} onChange={this.handleLimitChange}/> posts
+            Fetch <input id="limitInput" type="number" value={limit} onChange={this.handleLimitChange}/> posts
             from /r/buildapc/
             <select id="sortSelect" value={sort} onChange={this.handleSortChange}>
               <option>hot</option>
@@ -47,22 +47,29 @@ class App extends Component {
 class Listing extends Component {
   constructor(props) {
     super(props);
-    this.state = { posts: [] };
+    this.reloadPosts = this.reloadPosts.bind(this);
+    this.state = { posts: [], loading: false };
+  }
+
+  componentWillMount() {
+    this.reloadPosts(this.props.sort, this.props.limit);
   }
 
   componentWillReceiveProps(nextProps) {
     if (!isNaN(nextProps.limit)) {
-      this.setState({ posts: [] });
+      this.reloadPosts(nextProps.sort, nextProps.limit);
     }
   }
 
+  reloadPosts(sort, limit) {
+    this.setState({ loading: true });
+    fetchPosts(sort, limit, posts => {
+      this.setState({ posts: posts, loading: false });
+    });
+  }
+
   render() {
-    if (!isNaN(this.props.limit) && this.state.posts.length !== this.props.limit) {
-      fetchPosts(this.props.sort, this.props.limit, posts => {
-        this.setState({
-          posts: posts
-        });
-      });
+    if (this.state.loading) {
       return (
         <Loading />
       )

@@ -11,7 +11,7 @@ import $ from "jquery";
 export default function fetchPosts(subreddit, sort, limit, after, callback) {
     var url = "https://www.reddit.com/r/" + subreddit + "/" + sort + ".json?"
             + "limit=" + limit + "&after=" + after + "&jsonp=?";
-    console.log("Fetching %d posts from /r/%s...", limit, subreddit);
+    console.log("Fetching %d posts after '%s' from /r/%s/%s...", limit, after, subreddit, sort);
     console.debug(url);
     $.getJSON(url, function(data) {
         var posts = data.data.children
