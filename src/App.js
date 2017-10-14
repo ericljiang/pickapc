@@ -89,13 +89,16 @@ class Listing extends Component {
       )
     } else {
       return (
-        <table>
-          <tbody>
-            {this.state.posts.map(post =>
-              <Post post={post} key={post.name} />
-            )}
-          </tbody>
-        </table>
+        <div>
+          <table>
+            <tbody>
+              {this.state.posts.map(post =>
+                <Post post={post} key={post.name} />
+              )}
+            </tbody>
+          </table>
+          <p id="endOfPosts">{this.state.posts.length >= this.props.limit ? "" : "No more posts"}</p>
+        </div>
       );
     }
   }
