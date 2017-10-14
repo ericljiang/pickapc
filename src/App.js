@@ -9,7 +9,8 @@ class App extends Component {
     super(props);
     this.handleLimitChange = this.handleLimitChange.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
-    this.state = { limit: 10, sort: "hot" };
+    this.handleTimeChange = this.handleTimeChange.bind(this);
+    this.state = { limit: 10, sort: "hot", time: "day" };
   }
 
   handleLimitChange(e) {
@@ -20,9 +21,14 @@ class App extends Component {
     this.setState({ sort: e.target.value });
   }
 
+  handleTimeChange(e) {
+    this.setState({ time: e.target.value });
+  }
+
   render() {
     const limit = this.state.limit;
     const sort = this.state.sort;
+    const time = this.state.time;
     return (
       <div className="App">
         <header className="App-header">
@@ -36,9 +42,17 @@ class App extends Component {
               <option>top</option>
               <option>new</option>
             </select>
+            in the past
+            <select id="timeSelect" value={time} onChange={this.handleTimeChange}>
+              <option>hour</option>
+              <option>day</option>
+              <option>week</option>
+              <option>year</option>
+              <option>all</option>
+            </select>
           </p>
         </header>
-        <Listing sort={sort} limit={parseInt(limit, 10)} />
+        <Listing sort={sort} limit={parseInt(limit, 10)} time={time} />
       </div>
     );
   }
@@ -52,18 +66,18 @@ class Listing extends Component {
   }
 
   componentWillMount() {
-    this.reloadPosts(this.props.sort, this.props.limit);
+    this.reloadPosts(this.props.sort, this.props.limit, this.props.time);
   }
 
   componentWillReceiveProps(nextProps) {
     if (!isNaN(nextProps.limit)) {
-      this.reloadPosts(nextProps.sort, nextProps.limit);
+      this.reloadPosts(nextProps.sort, nextProps.limit, nextProps.time);
     }
   }
 
-  reloadPosts(sort, limit) {
+  reloadPosts(sort, limit, time) {
     this.setState({ loading: true });
-    fetchPosts(sort, limit, posts => {
+    fetchPosts(sort, limit, time, posts => {
       this.setState({ posts: posts, loading: false });
     });
   }
