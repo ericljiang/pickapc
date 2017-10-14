@@ -2,6 +2,10 @@ import fetchPosts from './reddit'
 import fetchParts from './pcpartpicker'
 
 export default function fetchPostsAndParts(sort, limit, callback) {
+    if (limit <= 0) {
+        callback([]);
+        return;
+    }
     var batchSize = limit * 5;
     var posts = [];
     var after = "";

@@ -29,7 +29,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to pickapc</h1>
           <p>
-            Fetch <input id="limitInput" type="number" value={limit} onChange={this.handleLimitChange}/> posts
+            Fetch <input id="limitInput" type="number" value={limit} min="0" onChange={this.handleLimitChange}/> posts
             from /r/buildapc/
             <select id="sortSelect" value={sort} onChange={this.handleSortChange}>
               <option>hot</option>
@@ -38,7 +38,7 @@ class App extends Component {
             </select>
           </p>
         </header>
-        <Listing sort={sort} limit={parseInt(limit)} />
+        <Listing sort={sort} limit={parseInt(limit, 10)} />
       </div>
     );
   }
