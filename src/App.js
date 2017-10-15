@@ -77,10 +77,13 @@ class Listing extends Component {
   }
 
   reloadPosts(sort, limit, time) {
-    this.setState({ loading: true });
-    fetchPosts(sort, limit, time, posts => {
-      this.setState({ posts: posts, loading: false });
+    if (this.state.currentRequest) {
+      this.state.currentRequest.cancel();
+    }
+    var cancellable = fetchPosts(sort, limit, time, posts => {
+      this.setState({ posts: posts, loading: false, currentRequest: null });
     });
+    this.setState({ loading: true, currentRequest: cancellable });
   }
 
   render() {

@@ -6,11 +6,21 @@ export default function fetchPostsAndParts(sort, limit, time, callback) {
         callback([]);
         return;
     }
+
+    var cancellable = { cancelled : false };
+    cancellable.cancel = function() {
+        cancellable.cancelled = true;
+    }
+
     var batchSize = limit * 5;
     var posts = [];
     var after = "";
+
     function accumulateBatches() {
         fetchBatchPostsAndParts(sort, batchSize, time, after, function(batch) {
+            if (cancellable.cancelled) {
+                return;
+            }
             Array.prototype.push.apply(posts, batch.filter(p => p.partsList));
             if (posts.length >= limit || batch.length === 0) {
                 callback(posts.slice(0, limit));
@@ -20,7 +30,9 @@ export default function fetchPostsAndParts(sort, limit, time, callback) {
             }
         })
     }
+
     accumulateBatches();
+    return cancellable;
 }
 
 /**
