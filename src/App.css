@@ -31,6 +31,15 @@ html {
 #limitInput {
   width: 3em;
   text-align: right;
+  margin: 0em 0.5em;
+}
+
+#sortSelect {
+  margin-right: 0.5em;
+}
+
+#timeSelect {
+  margin-left: 0.5em;
 }
 
 td.title a:link {

@@ -35,8 +35,9 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to pickapc</h1>
           <p>
-            Fetch <input id="limitInput" type="number" value={limit} min="0" onChange={this.handleLimitChange}/> posts
-            from /r/buildapc/
+            Fetch
+            <input id="limitInput" type="number" value={limit} min="0" onChange={this.handleLimitChange} />
+            posts from /r/buildapc/
             <select id="sortSelect" value={sort} onChange={this.handleSortChange}>
               <option>hot</option>
               <option>top</option>
@@ -108,7 +109,7 @@ class Listing extends Component {
  * Renders a loading indicator.
  * @param {Object} props
  */
-function Loading(props) {
+function Loading() {
   return (
     <img src={logo} className="Loading-indicator" alt="loading" />
   );
